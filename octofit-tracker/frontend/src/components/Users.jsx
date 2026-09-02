@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { fetchCollection } from '../api.js'
+import { apiBaseUrl, fetchCollection } from '../api.js'
 
 function Users() {
   const [users, setUsers] = useState([])
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetchCollection('users').then(setUsers).catch((loadError) => setError(loadError.message))
+    fetchCollection(`${apiBaseUrl}/api/users/`).then(setUsers).catch((loadError) => setError(loadError.message))
   }, [])
 
   return (
