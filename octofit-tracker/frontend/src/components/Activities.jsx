@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
-import { apiBaseUrl, fetchCollection } from '../api.js'
+import { apiBaseUrl, normalizeCollection } from '../api.js'
 
 function Activities() {
   const [activities, setActivities] = useState([])
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetchCollection(`${apiBaseUrl}/api/activities/`).then(setActivities).catch((loadError) => setError(loadError.message))
+    fetch(`${apiBaseUrl}/api/activities/`).then((response) => {
+      if (!response.ok) throw new Error('Unable to load activities')
+      return response.json()
+    }).then((payload) => setActivities(normalizeCollection(payload))).catch((loadError) => setError(loadError.message))
   }, [])
 
   return (

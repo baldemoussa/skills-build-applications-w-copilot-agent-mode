@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
-import { apiBaseUrl, fetchCollection } from '../api.js'
+import { apiBaseUrl, normalizeCollection } from '../api.js'
 
 function Teams() {
   const [teams, setTeams] = useState([])
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetchCollection(`${apiBaseUrl}/api/teams/`).then(setTeams).catch((loadError) => setError(loadError.message))
+    fetch(`${apiBaseUrl}/api/teams/`).then((response) => {
+      if (!response.ok) throw new Error('Unable to load teams')
+      return response.json()
+    }).then((payload) => setTeams(normalizeCollection(payload))).catch((loadError) => setError(loadError.message))
   }, [])
 
   return (

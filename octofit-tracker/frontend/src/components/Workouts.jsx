@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
-import { apiBaseUrl, fetchCollection } from '../api.js'
+import { apiBaseUrl, normalizeCollection } from '../api.js'
 
 function Workouts() {
   const [workouts, setWorkouts] = useState([])
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetchCollection(`${apiBaseUrl}/api/workouts/`).then(setWorkouts).catch((loadError) => setError(loadError.message))
+    fetch(`${apiBaseUrl}/api/workouts/`).then((response) => {
+      if (!response.ok) throw new Error('Unable to load workouts')
+      return response.json()
+    }).then((payload) => setWorkouts(normalizeCollection(payload))).catch((loadError) => setError(loadError.message))
   }, [])
 
   return (
