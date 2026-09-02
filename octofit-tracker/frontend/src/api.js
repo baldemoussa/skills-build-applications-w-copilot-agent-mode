@@ -12,7 +12,7 @@ export async function fetchCollection(resourceOrEndpoint) {
 
   if (!response.ok) {
     throw new Error(`Unable to load ${resource}`)
-  }
+  } 
 
   const payload = await response.json()
 
