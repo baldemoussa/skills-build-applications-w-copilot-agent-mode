@@ -5,33 +5,28 @@ import leaderboardRouter from './routes/leaderboard.js';
 import teamsRouter from './routes/teams.js';
 import usersRouter from './routes/users.js';
 import workoutsRouter from './routes/workouts.js';
-
 const app = express();
 const port = 8000;
 const codespaceName = process.env.CODESPACE_NAME;
 const apiUrl = codespaceName
-  ? `https://${codespaceName}-8000.app.github.dev`
-  : `http://localhost:${port}`;
-
+    ? `https://${codespaceName}-8000.app.github.dev`
+    : `http://localhost:${port}`;
 app.use(express.json());
-
 app.get('/api/health', (_request, response) => {
-  response.json({ status: 'ok', apiUrl });
+    response.json({ status: 'ok', apiUrl });
 });
-
 app.use('/api/users', usersRouter);
 app.use('/api/teams', teamsRouter);
 app.use('/api/activities', activitiesRouter);
 app.use('/api/leaderboard', leaderboardRouter);
 app.use('/api/workouts', workoutsRouter);
-
 connectDatabase()
-  .then(() => {
+    .then(() => {
     app.listen(port, () => {
-      console.log(`OctoFit API listening at ${apiUrl}`);
+        console.log(`OctoFit API listening at ${apiUrl}`);
     });
-  })
-  .catch((error) => {
+})
+    .catch((error) => {
     console.error('Unable to start OctoFit API:', error);
     process.exit(1);
-  });
+});
